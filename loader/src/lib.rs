@@ -16,7 +16,7 @@ pub struct PluginLibrary {
 impl Drop for PluginLibrary {
     fn drop(&mut self) {
         println!("Dropping {}", self.path);
-		
+		loader::unload_plugin_library(Box::into_raw(self.library));
     }
 }
 

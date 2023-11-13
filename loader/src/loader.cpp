@@ -64,3 +64,8 @@ extern "C" LibraryVTable* load_plugin_library(RuntimeVTable runtime, const char*
 
 	return vtable;
 }
+
+void unload_plugin_library(dll::shared_library* vtable) {
+	cout << "Unloading library "<< endl;
+	delete vtable;
+}

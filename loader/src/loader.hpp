@@ -12,4 +12,5 @@
 
 extern "C" {
 	LibraryVTable* load_plugin_library(RuntimeVTable runtime, const char* path);
+	void unload_plugin_library(dll::shared_library* vtable);
 }

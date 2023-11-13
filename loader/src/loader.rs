@@ -6,6 +6,9 @@ extern "C" {
 	#[link_name = "load_plugin_library"]
 	fn _load_plugin_library(runtime: RuntimeVTable, path: *const c_char) -> *mut LibraryVTable;
 
+	#[link_name = "unload_plugin_library"]
+	fn _unload_plugin_library(vtable: LibraryVTable) -> *mut LibraryVTable;
+
 }
 
 pub fn load_plugin_library<T: AsRef<str>>(path: T) -> Option<LibraryVTable> {
@@ -26,4 +29,8 @@ pub fn load_plugin_library<T: AsRef<str>>(path: T) -> Option<LibraryVTable> {
 	};
 
 	Some(table)
+}
+
+pub fn unload_plugin_library(vtable: *const ()) {
+	unsafe { _unload_plugin_library(vtable) }
 }
