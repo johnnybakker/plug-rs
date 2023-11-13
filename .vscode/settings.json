@@ -1,0 +1,27 @@
+{
+	"rust-analyzer.cargo.buildScripts.enable": true,
+	"rust-analyzer.linkedProjects": [
+		".\\loader\\Cargo.toml",
+		".\\Cargo.toml",
+		".\\plugin\\Cargo.toml",
+		".\\plugins\\first\\Cargo.toml",
+		".\\plugins\\second\\Cargo.toml",
+		".\\plugins\\second\\Cargo.toml"
+	],
+	"files.exclude": {
+		"**/.git": true,
+		"**/.svn": true,
+		"**/.hg": true,
+		"**/CVS": true,
+		"**/.DS_Store": true,
+		"**/Thumbs.db": true,
+		"**/target": true
+	},
+	"files.associations": {
+		"*.cu": "cpp",
+		"*.cs": "csharp",
+		"*.json": "jsonc",
+		"iostream": "cpp"
+	}
+
+}

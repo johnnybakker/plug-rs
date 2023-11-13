@@ -1,0 +1,11 @@
+[package]
+name = "plug-loader"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+plug-plugin = { path = "../plugin"}
+
+[build-dependencies]
+cc = "1.0"
+cargo_metadata="0.18.1"
