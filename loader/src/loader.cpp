@@ -1,71 +1,55 @@
 #include "loader.hpp"
 
 using namespace std;
-namespace fs = boost::filesystem;
-namespace dll = boost::dll;
 
-extern "C" LibraryVTable* load_plugin_library(RuntimeVTable runtime, const char* path) {
-	fs::path p(path);
+extern "C" void* plugin_library_load(const char* path)
+{
+	boost::filesystem::path p(path);
 
-	if(!fs::exists(p) || !fs::is_regular_file(p)) 
+	if(!boost::filesystem::exists(p) || !boost::filesystem::is_regular_file(p)) 
 		return nullptr;
 
-	dll::library_info info(p);
+	return new boost::dll::shared_library(path);
+}
+
+extern "C" void  plugin_library_unload(void* ptr)
+{
+	if(ptr != nullptr) delete from_ptr(ptr);
+}
+
+extern "C" PluginVTableArray plugin_library_vtables(void* ptr)
+{
+ 	auto lib = from_ptr(ptr);
+
+	boost::dll::library_info info(lib->location());
 
 	const char* PLUGIN_LIBRARY_VTABLE_SECTION = ".vtable";
 	const char* INIT_PLUGIN_RUNTIME_SYMBOL = "__init_plugin_runtime";
 
-	auto sections = info.sections();
+	// auto sections = info.sections();
 
-	for(auto symbol : sections)
-		cout << "Found: " << symbol << endl;
-
+	// for(auto symbol : sections)
+	// 	cout << "Found: " << symbol << endl;
 
 	auto symbols = info.symbols(PLUGIN_LIBRARY_VTABLE_SECTION);
-	cout << "Found " << symbols.size() << " symbols in plugin library vtable"  << endl;
-	
-	if(symbols.size() == 0) 
-		return nullptr;
-
-	for(auto symbol : symbols)
-		cout << "Found: " << symbol << endl;
-
 	auto init_runtime_pos = find(symbols.begin(), symbols.end(), INIT_PLUGIN_RUNTIME_SYMBOL);
 	
-	if(init_runtime_pos == symbols.end()) {
-		cerr << "Failed to find init symbol: " << INIT_PLUGIN_RUNTIME_SYMBOL << endl;
-		return nullptr;
+	if(init_runtime_pos != symbols.end()) {
+		symbols.erase(init_runtime_pos);
 	}
 
-	// Remove the init runtime symbol from the symbols vector, 
-	// so that we can treat this vector as the plugin init vector
-	symbols.erase(init_runtime_pos);
-
-	auto lib = new dll::shared_library(path);
+	PluginVTableArray arr;
+	arr.length = symbols.size();
+	arr.vtables = new PluginVTable[arr.length];
 	
-	LibraryVTable* vtable = new LibraryVTable();
-	vtable->ptr = lib;
-	vtable->path = new char[strlen(path)];
-	strcpy(vtable->path, path);
-	vtable->amount = symbols.size();
-	vtable->plugins = new PluginVTable[vtable->amount];
-	
-	// Initialize the library runtime
-	auto init_runtime = lib->get<void(RuntimeVTable)>(INIT_PLUGIN_RUNTIME_SYMBOL);
-	cout << "Initialize runtime" << endl;
-	init_runtime(runtime);
-	cout << "Runtime initialized" << endl;
-
-	for(int i = 0; i < vtable->amount; i++) {
-		auto symbol = symbols[i];
-		cout << "Init vtable for plugin symbol: " << symbol << endl;
- 		vtable->plugins[i] = lib->get<PluginVTable()>(symbol)();
+	for(int i = 0; i < arr.length; i++) {
+ 		arr.vtables[i] = lib->get<PluginVTable()>(symbols[i])();
 	}
 
-	return vtable;
+	return arr;
 }
 
-void unload_plugin_library(dll::shared_library* vtable) {
-	cout << "Unloading library "<< endl;
-	delete vtable;
+
+boost::dll::shared_library* from_ptr(void* ptr) {
+	return (boost::dll::shared_library*)(ptr);
 }

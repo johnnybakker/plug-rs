@@ -16,7 +16,7 @@ fn main() {
     let mut config = Config::default();
 	config.export.include.push("PluginVTable".to_owned());
 	config.export.include.push("RuntimeVTable".to_owned());
-	config.export.include.push("LibraryVTable".to_owned());
+	config.export.include.push("PluginVTableArray".to_owned());
 
     cbindgen::generate_with_config(&manifest_dir, config).unwrap().write_to_file(&output_file);
 }

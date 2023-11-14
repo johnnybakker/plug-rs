@@ -21,7 +21,10 @@
 		"*.cu": "cpp",
 		"*.cs": "csharp",
 		"*.json": "jsonc",
-		"iostream": "cpp"
+		"iostream": "cpp",
+		"xlocale": "cpp",
+		"ostream": "cpp",
+		"vector": "cpp"
 	}
 
 }

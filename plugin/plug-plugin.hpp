@@ -9,16 +9,15 @@ struct RuntimeVTable {
 };
 
 struct PluginVTable {
-  void *ptr;
+  void *(*construct)();
+  void (*destruct)(void*);
   void (*load)(void*);
   void (*unload)(void*);
 };
 
-struct LibraryVTable {
-  char *path;
-  void *ptr;
-  PluginVTable *plugins;
-  uintptr_t amount;
+struct PluginVTableArray {
+  uintptr_t length;
+  PluginVTable *vtables;
 };
 
 extern "C" {
