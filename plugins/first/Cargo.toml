@@ -8,3 +8,9 @@ crate-type = ["cdylib"]
 
 [dependencies]
 plug-plugin = { path = "../../plugin" }
+
+[profile.dev]
+panic = "unwind"
+
+[profile.release]
+panic = "unwind"

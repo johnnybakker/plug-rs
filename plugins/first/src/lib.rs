@@ -4,11 +4,12 @@ struct FirstPlugin;
 
 impl Plugin for FirstPlugin {
     fn load(&mut self) {
-		println!("Load!!!!!!!!!");
+		println!("Load");
+		panic!("Test");
     }
 
     fn unload(&mut self) {
-        println!("Unload!!!!!!!!!!!!!!")
+        println!("Unload")
     }
 }
 

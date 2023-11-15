@@ -1,7 +1,9 @@
+use std::panic::{UnwindSafe, RefUnwindSafe};
+
 pub mod ffi;
 pub mod runtime;
 
-pub trait Plugin : Sized + Default  {
+pub trait Plugin : Sized + Default + UnwindSafe + RefUnwindSafe {
 	fn load(&mut self);
 	fn unload(&mut self);
 }

@@ -11,8 +11,8 @@ struct RuntimeVTable {
 struct PluginVTable {
   void *(*construct)();
   void (*destruct)(void*);
-  void (*load)(void*);
-  void (*unload)(void*);
+  void *(*load)(void*);
+  void *(*unload)(void*);
 };
 
 struct PluginVTableArray {

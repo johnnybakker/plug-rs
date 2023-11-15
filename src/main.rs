@@ -1,23 +1,13 @@
-use std::{io::Read, time::Duration};
-
+use std::time::Duration;
 use plug_loader::PluginLibrary;
-use plug_plugin::{Plugin, ffi::PluginVTable};
-
-// pub struct PluginWrapper(PluginVTable);
-
-// impl Plugin for PluginWrapper {
-//     fn load(&mut self) {
-//         (self.0.load)(self.0.ptr);
-//     }
-
-//     fn unload(&mut self) {
-//         (self.0.unload)(self.0.ptr);
-//     }
-// }
-
-
 
 fn main() {
+
+	// std::panic::set_hook(Box::new(|info|{
+	// 	println!("Custom hook");
+	// }));	
+
+	
 
 	let current_dir = std::env::current_dir()
 		.expect("Current workdirecotry is not valid");
@@ -27,10 +17,12 @@ fn main() {
 
 	let mut library = PluginLibrary::new(first_plugin_path);
 
-	loop {
-		library.load();
-		std::thread::sleep(Duration::from_secs(5));
+
+	library.load();
+
+	//loop {
+		std::thread::sleep(Duration::from_secs(1));
 		library.unload();
-		std::thread::sleep(Duration::from_secs(5));
-	}
+		std::thread::sleep(Duration::from_secs(1));
+	//}
 }

@@ -5,3 +5,9 @@ edition = "2021"
 
 [build-dependencies]
 cbindgen = "0.26.0"
+
+[profile.dev]
+panic = "abort"
+
+[profile.release]
+panic = "abort"

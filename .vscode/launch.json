@@ -20,7 +20,14 @@
 				}
 			},
 			"args": [],
-			"cwd": "${workspaceFolder}"
+			"cwd": "${workspaceFolder}",
+			"console": "internalConsole",
+			"terminal": "console",
+			"presentation": {
+				"hidden": false,
+				"group": "",
+				"order": 1
+			}
 		},
 		{
 			"type": "lldb",
