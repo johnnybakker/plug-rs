@@ -1,4 +1,4 @@
-use std::{any::Any, panic::catch_unwind};
+use std::{panic::catch_unwind};
 
 use crate::Plugin;
 

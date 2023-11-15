@@ -1,9 +1,12 @@
 use cargo_metadata::{MetadataCommand, CargoOpt};
 
-const BOOST_DIR: &str = "C:\\Tools\\source\\boost";
-const BOOST_LIB_DIR: &str = "C:\\Tools\\source\\boost\\stage\\lib";
-
 fn main() {
+
+	let boost_include_dir: String = std::env::var("BOOST_INCLUDE")
+		.expect("No BOOST_INCLUDE specified as environment variable");
+
+	let boost_lib_dir: String = std::env::var("BOOST_LIB")
+		.expect("No BOOST_LIB specified as environment variable");
 
 	let metadata = MetadataCommand::new()
 		.manifest_path("./Cargo.toml")
@@ -21,14 +24,14 @@ fn main() {
 	cc::Build::new()
 		.cpp(true)
 		.include("src")
-		.include(BOOST_DIR)
+		.include(boost_include_dir)
 		.include(plug_plugin_manifest_dir)
 		.file("src/loader.cpp")
 		// https://learn.microsoft.com/en-us/cpp/build/reference/eh-exception-handling-model?view=msvc-170
 		.flag("/EHsc")
 		.compile("loader");
 
-	println!("cargo:rustc-link-search={}", BOOST_LIB_DIR);
+	println!("cargo:rustc-link-search={}", boost_lib_dir);
 	println!("cargo:rerun-if-changed=src/loader.cpp");
 	println!("cargo:rerun-if-changed=src/loader.hpp");
 
